@@ -24,19 +24,35 @@ int main() {
     string code;
     int total = 0;
     while (fin >> code) {
-        int hash = get_hash_index(code);
+        int hash = gen_hash_index(code);
 
-        if (hash_table.find(hash) != hash_table.end())
+        if (hash_table.find(hash) != hash_table.end()) {
+            hash_table.at(hash).push_back(code); // If the hash already exists, then the list already exists
+        } else {
+            list<string> new_list {code}; // otherwise it's the first time seeing a hash
+            hash_table.emplace(hash, new_list);
+        }
+    }
+
+    auto it = hash_table.begin();
+    auto end = hash_table.end();
+    while (it != hash_table.end()) {
+        cout << "Hash - " << it->first << endl;
+
+        list<string> list = it->second;
+        for (string str : list) {
+            cout << "\t" << str << endl;
+        }
+
+        it++;
     }
 
     fin.close();
 
-    
-
     return 0;
 }
 
-int get_hash_index(string str) {
+int gen_hash_index(string str) {
     int hash = 0;
 
     for (char c : str) {
