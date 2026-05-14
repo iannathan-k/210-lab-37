@@ -1,11 +1,13 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <map>
+#include <list>
 using namespace std;
 
 // COMSC-210 | Lab 37 | Ian Kusmiantoro
 
-int sum_ascii(string);
+int gen_hash_index(string);
 
 int main() {
     ifstream fin;
@@ -17,29 +19,31 @@ int main() {
         return 1;
     }
 
-    // Sum each line and add to total
+    map<int, list<string>> hash_table;
+
     string code;
     int total = 0;
     while (fin >> code) {
-        total += sum_ascii(code);
+        int hash = get_hash_index(code);
+
+        if (hash_table.find(hash) != hash_table.end())
     }
 
-    cout << "Total sum: " << total << endl;
-    // yay I get 69893419
-
     fin.close();
+
+    
 
     return 0;
 }
 
-int sum_ascii(string str) {
-    int sum = 0;
+int get_hash_index(string str) {
+    int hash = 0;
 
     for (char c : str) {
-        sum += (int) c;
+        hash += (int) c;
     }
 
-    return sum;
+    return hash;
 }
 
 /* 
