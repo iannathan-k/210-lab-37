@@ -22,7 +22,6 @@ int main() {
     map<int, list<string>> hash_table;
 
     string code;
-    int total = 0;
     while (fin >> code) {
         int hash = gen_hash_index(code);
 
@@ -35,8 +34,10 @@ int main() {
     }
 
     auto it = hash_table.begin();
-    auto end = hash_table.end();
-    while (it != hash_table.end()) {
+    auto end = hash_table.begin(); // iterator to end on
+    advance(end, 100); // Little trick from the Goat Manager 9000
+
+    while (it != end) {
         cout << "Hash - " << it->first << endl;
 
         list<string> list = it->second;
