@@ -35,7 +35,13 @@ int main() {
 
     auto it = hash_table.begin();
     auto end = hash_table.begin(); // iterator to end on
-    advance(end, 100); // Little trick from the Goat Manager 9000
+
+    // Prevent crash when table size < 100
+    if (hash_table.size() < 100) {
+        end = hash_table.end();
+    } else {
+        advance(end, 100); // Little trick from the Goat Manager 9000
+    }
 
     while (it != end) {
         cout << "Hash - " << it->first << endl;
