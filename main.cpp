@@ -5,7 +5,7 @@
 #include <list>
 using namespace std;
 
-// COMSC-210 | Lab 37 | Ian Kusmiantoro
+// COMSC-210 | Lab 38 | Ian Kusmiantoro
 
 int gen_hash_index(string);
 
