@@ -8,6 +8,9 @@ using namespace std;
 // COMSC-210 | Lab 38 | Ian Kusmiantoro
 
 int gen_hash_index(string);
+void addKey(map<int, list<string>>&, string);
+bool removeKey(map<int, list<string>>&, string);
+bool searchKey(map<int, list<string>>&, string);
 
 int main() {
     ifstream fin;
@@ -23,14 +26,7 @@ int main() {
 
     string code;
     while (fin >> code) {
-        int hash = gen_hash_index(code);
-
-        if (hash_table.find(hash) != hash_table.end()) {
-            hash_table.at(hash).push_back(code); // If the hash already exists, then the list already exists
-        } else {
-            list<string> new_list {code}; // otherwise it's the first time seeing a hash
-            hash_table.emplace(hash, new_list);
-        }
+        addKey(hash_table, code);
     }
 
     fin.close();
@@ -42,6 +38,7 @@ int main() {
         cout << "[2] Search For a Key" << endl;
         cout << "[3] Add a Key" << endl;
         cout << "[4] Remove a Key" << endl;
+        cout << "[5] Modify a Key" << endl;
         cout << "Option: ";
         cin >> option;
 
@@ -72,21 +69,7 @@ int main() {
             cout << "Enter Key to Search: ";
             cin >> search_key;
 
-            // Verify if the hash even exists
-            bool found = false;
-            int hash = gen_hash_index(search_key);
-            if (hash_table.find(hash) != hash_table.end()) {
-
-                // Traverse the list to find if we have our hash
-                for (string code : hash_table.at(hash)) {
-                    if (code == search_key) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-
-            if (found) {
+            if (searchKey(hash_table, search_key)) {
                 cout << "Key was found!" << endl;
             } else {
                 cout << "Key was not found!" << endl;
@@ -96,40 +79,27 @@ int main() {
             cout << "Enter key to Add: ";
             cin >> new_key;
 
-            int hash = gen_hash_index(new_key);
-            // From Above
-            if (hash_table.find(hash) != hash_table.end()) {
-                hash_table.at(hash).push_back(new_key); // If the hash already exists, then the list already exists
-            } else {
-                list<string> new_list {new_key}; // otherwise it's the first time seeing a hash
-                hash_table.emplace(hash, new_list);
-            }
+            addKey(hash_table, new_key);
         } else if (option == 4) {
             string doomed_key;
             cout << "Enter key to Remove: ";
             cin >> doomed_key;
 
-            int hash = gen_hash_index(doomed_key);
-            // Ensure what we're deleting actually exists
-            if (hash_table.find(hash) != hash_table.end()) {
+            removeKey(hash_table, doomed_key);
+        } else if (option == 5) {
+            string old_key;
+            cout << "Enter key to Modify: ";
+            cin >> old_key;
 
-                // Check if the key exists in the list
-                bool found = false;
-                for (string code : hash_table.at(hash)) {
-                    if (code == doomed_key) {
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if (found) {
-                    hash_table.at(hash).remove(doomed_key);
-                } else {
-                    cout << "Key not found!" << endl;
-                }
+            string new_key;
+            cout << "Enter new key Value: ";
+            cin >> new_key;
 
+            // Ensure the old is key removed and actually exists
+            if (removeKey(hash_table, old_key)) {
+                addKey(hash_table, new_key);
             } else {
-                cout << "Key doesn't exist!" << endl;
+                cout << "Key not modified!" << endl;
             }
         }
 
@@ -156,3 +126,58 @@ These targets are present in the dataset and can be used for testing:
 666D109AA22E
 E1D2665B21EA
 */
+
+bool searchKey(map<int, list<string>>& hash_table, string search_key) {
+    // Verify if the hash even exists
+    int hash = gen_hash_index(search_key);
+    if (hash_table.find(hash) != hash_table.end()) {
+        // Traverse the list to find if we have our hash
+        for (string code : hash_table.at(hash)) {
+            if (code == search_key) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void addKey(map<int, list<string>>& hash_table, string new_key) {
+    int hash = gen_hash_index(new_key);
+
+    if (hash_table.find(hash) != hash_table.end()) {
+        hash_table.at(hash).push_back(new_key); // If the hash already exists, then the list already exists
+    } else {
+        list<string> new_list {new_key}; // otherwise it's the first time seeing a hash
+        hash_table.emplace(hash, new_list);
+    }
+}
+
+bool removeKey(map<int, list<string>>& hash_table, string doomed_key) {
+    int hash = gen_hash_index(doomed_key);
+    // Ensure what we're deleting actually exists
+    if (hash_table.find(hash) != hash_table.end()) {
+
+        // Check if the key exists in the list
+        bool found = false;
+        for (string code : hash_table.at(hash)) {
+            if (code == doomed_key) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) {
+            hash_table.at(hash).remove(doomed_key);
+        } else {
+            cout << "Key not found!" << endl;
+            return false;
+        }
+
+    } else {
+        cout << "Key doesn't exist!" << endl;
+        return false;
+    }
+
+    return true;
+}
