@@ -85,7 +85,9 @@ int main() {
             cout << "Enter key to Remove: ";
             cin >> doomed_key;
 
-            removeKey(hash_table, doomed_key);
+            if (!removeKey(hash_table, doomed_key)) {
+                cout << "Key not found!" << endl;
+            }
         } else if (option == 5) {
             string old_key;
             cout << "Enter key to Modify: ";
@@ -130,15 +132,17 @@ E1D2665B21EA
 bool searchKey(map<int, list<string>>& hash_table, string search_key) {
     // Verify if the hash even exists
     int hash = gen_hash_index(search_key);
-    if (hash_table.find(hash) != hash_table.end()) {
-        // Traverse the list to find if we have our hash
-        for (string code : hash_table.at(hash)) {
-            if (code == search_key) {
-                return true;
-            }
-        }
+    if (hash_table.find(hash) == hash_table.end()) {
+        return false;
     }
 
+    // Traverse the list to find if we have our hash
+    for (string code : hash_table.at(hash)) {
+        if (code == search_key) {
+            return true;
+        }
+    }
+    
     return false;
 }
 
@@ -154,30 +158,13 @@ void addKey(map<int, list<string>>& hash_table, string new_key) {
 }
 
 bool removeKey(map<int, list<string>>& hash_table, string doomed_key) {
-    int hash = gen_hash_index(doomed_key);
-    // Ensure what we're deleting actually exists
-    if (hash_table.find(hash) != hash_table.end()) {
-
-        // Check if the key exists in the list
-        bool found = false;
-        for (string code : hash_table.at(hash)) {
-            if (code == doomed_key) {
-                found = true;
-                break;
-            }
-        }
-        
-        if (found) {
-            hash_table.at(hash).remove(doomed_key);
-        } else {
-            cout << "Key not found!" << endl;
-            return false;
-        }
-
-    } else {
-        cout << "Key doesn't exist!" << endl;
+    // Ensure what we are deleting exists
+    if (!searchKey(hash_table, doomed_key)) {
         return false;
     }
+
+    int hash = gen_hash_index(doomed_key);
+    hash_table.at(hash).remove(doomed_key);
 
     return true;
 }
