@@ -41,6 +41,7 @@ int main() {
         cout << "[1] Print First 100 Entries" << endl;
         cout << "[2] Search For a Key" << endl;
         cout << "[3] Add a Key" << endl;
+        cout << "[4] Remove a Key" << endl;
         cout << "Option: ";
         cin >> option;
 
@@ -77,7 +78,6 @@ int main() {
             if (hash_table.find(hash) != hash_table.end()) {
 
                 // Traverse the list to find if we have our hash
-                
                 for (string code : hash_table.at(hash)) {
                     if (code == search_key) {
                         found = true;
@@ -103,6 +103,33 @@ int main() {
             } else {
                 list<string> new_list {new_key}; // otherwise it's the first time seeing a hash
                 hash_table.emplace(hash, new_list);
+            }
+        } else if (option == 4) {
+            string doomed_key;
+            cout << "Enter key to Remove: ";
+            cin >> doomed_key;
+
+            int hash = gen_hash_index(doomed_key);
+            // Ensure what we're deleting actually exists
+            if (hash_table.find(hash) != hash_table.end()) {
+
+                // Check if the key exists in the list
+                bool found = false;
+                for (string code : hash_table.at(hash)) {
+                    if (code == doomed_key) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (found) {
+                    hash_table.at(hash).remove(doomed_key);
+                } else {
+                    cout << "Key not found!" << endl;
+                }
+
+            } else {
+                cout << "Key doesn't exist!" << endl;
             }
         }
 
