@@ -39,6 +39,7 @@ int main() {
     while (true) { // no option to exit YET
         cout << "Hash Table Menu" << endl;
         cout << "[1] Print First 100 Entries" << endl;
+        cout << "[2] Search For A Key" << endl;
         cout << "Option: ";
         cin >> option;
 
@@ -63,6 +64,31 @@ int main() {
                 }
 
                 it++;
+            }
+        } else if (option == 2) {
+            string search_key;
+            cout << "Enter Key To Search: ";
+            cin >> search_key;
+
+            // Verify if the hash even exists
+            bool found = false;
+            int hash = gen_hash_index(search_key);
+            if (hash_table.find(hash) != hash_table.end()) {
+
+                // Traverse the list to find if we have our hash
+                
+                for (string code : hash_table.at(hash)) {
+                    if (code == search_key) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (found) {
+                cout << "Key was found!" << endl;
+            } else {
+                cout << "Key was not found!" << endl;
             }
         }
 
