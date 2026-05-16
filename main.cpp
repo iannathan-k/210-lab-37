@@ -7,6 +7,13 @@ using namespace std;
 
 // COMSC-210 | Lab 38 | Ian Kusmiantoro
 
+const int PRINT = 1;
+const int SEARCH = 2;
+const int ADD = 3;
+const int REMOVE = 4;
+const int MODIFY = 5;
+const int EXIT = 6;
+
 int gen_hash_index(string);
 void addKey(map<int, list<string>>&, string);
 bool removeKey(map<int, list<string>>&, string);
@@ -32,17 +39,18 @@ int main() {
     fin.close();
 
     int option = -1;
-    while (true) { // no option to exit YET
+    while (option != EXIT) {
         cout << "Hash Table Menu" << endl;
         cout << "[1] Print First 100 Entries" << endl;
         cout << "[2] Search For a Key" << endl;
         cout << "[3] Add a Key" << endl;
         cout << "[4] Remove a Key" << endl;
         cout << "[5] Modify a Key" << endl;
+        cout << "[6] Exit" << endl;
         cout << "Option: ";
         cin >> option;
 
-        if (option == 1) {
+        if (option == PRINT) {
             // Code from Lab 37
             auto it = hash_table.begin();
             auto end = hash_table.begin(); // iterator to end on
@@ -64,7 +72,7 @@ int main() {
 
                 it++;
             }
-        } else if (option == 2) {
+        } else if (option == SEARCH) {
             string search_key;
             cout << "Enter Key to Search: ";
             cin >> search_key;
@@ -74,13 +82,13 @@ int main() {
             } else {
                 cout << "Key was not found!" << endl;
             }
-        } else if (option == 3) {
+        } else if (option == ADD) {
             string new_key;
             cout << "Enter key to Add: ";
             cin >> new_key;
 
             addKey(hash_table, new_key);
-        } else if (option == 4) {
+        } else if (option == REMOVE) {
             string doomed_key;
             cout << "Enter key to Remove: ";
             cin >> doomed_key;
@@ -88,7 +96,7 @@ int main() {
             if (!removeKey(hash_table, doomed_key)) {
                 cout << "Key not found!" << endl;
             }
-        } else if (option == 5) {
+        } else if (option == MODIFY) {
             string old_key;
             cout << "Enter key to Modify: ";
             cin >> old_key;
@@ -103,6 +111,8 @@ int main() {
             } else {
                 cout << "Key not modified!" << endl;
             }
+        } else if (option != EXIT) {
+            cout << "Invalid Option!" << endl;
         }
 
         cout << endl;
