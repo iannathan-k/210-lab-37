@@ -39,7 +39,8 @@ int main() {
     while (true) { // no option to exit YET
         cout << "Hash Table Menu" << endl;
         cout << "[1] Print First 100 Entries" << endl;
-        cout << "[2] Search For A Key" << endl;
+        cout << "[2] Search For a Key" << endl;
+        cout << "[3] Add a Key" << endl;
         cout << "Option: ";
         cin >> option;
 
@@ -67,7 +68,7 @@ int main() {
             }
         } else if (option == 2) {
             string search_key;
-            cout << "Enter Key To Search: ";
+            cout << "Enter Key to Search: ";
             cin >> search_key;
 
             // Verify if the hash even exists
@@ -89,6 +90,19 @@ int main() {
                 cout << "Key was found!" << endl;
             } else {
                 cout << "Key was not found!" << endl;
+            }
+        } else if (option == 3) {
+            string new_key;
+            cout << "Enter key to Add: ";
+            cin >> new_key;
+
+            int hash = gen_hash_index(new_key);
+            // From Above
+            if (hash_table.find(hash) != hash_table.end()) {
+                hash_table.at(hash).push_back(new_key); // If the hash already exists, then the list already exists
+            } else {
+                list<string> new_list {new_key}; // otherwise it's the first time seeing a hash
+                hash_table.emplace(hash, new_list);
             }
         }
 
