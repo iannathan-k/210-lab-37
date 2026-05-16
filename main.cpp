@@ -33,28 +33,41 @@ int main() {
         }
     }
 
-    auto it = hash_table.begin();
-    auto end = hash_table.begin(); // iterator to end on
+    fin.close();
 
-    // Prevent crash when table size < 100
-    if (hash_table.size() < 100) {
-        end = hash_table.end();
-    } else {
-        advance(end, 100); // Little trick from the Goat Manager 9000
-    }
+    int option = -1;
+    while (true) { // no option to exit YET
+        cout << "Hash Table Menu" << endl;
+        cout << "[1] Print First 100 Entries" << endl;
+        cout << "Option: ";
+        cin >> option;
 
-    while (it != end) {
-        cout << "Hash - " << it->first << endl;
+        if (option == 1) {
+            // Code from Lab 37
+            auto it = hash_table.begin();
+            auto end = hash_table.begin(); // iterator to end on
 
-        list<string> list = it->second;
-        for (string str : list) {
-            cout << "\t" << str << endl;
+            // Prevent crash when table size < 100
+            if (hash_table.size() < 100) {
+                end = hash_table.end();
+            } else {
+                advance(end, 100); // Little trick from the Goat Manager 9000
+            }
+
+            while (it != end) {
+                cout << "Hash - " << it->first << endl;
+
+                list<string> list = it->second;
+                for (string str : list) {
+                    cout << "\t" << str << endl;
+                }
+
+                it++;
+            }
         }
 
-        it++;
+        cout << endl;
     }
-
-    fin.close();
 
     return 0;
 }
